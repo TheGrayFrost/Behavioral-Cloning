@@ -62,11 +62,15 @@ def telemetry(sid, data):
         imgString = data["image"]
         image = Image.open(BytesIO(base64.b64decode(imgString)))
         image_array = np.asarray(image)
-        image_array = cv2.cvtColor(image_array, cv2.COLOR_RGB2HLS)
+        # Uncomment the line below to use HLS model
+        # image_array = cv2.cvtColor(image_array, cv2.COLOR_RGB2HLS)
+
+        # Uncomment these lines to use the concatenation of HLS and RGB images
         # image = np.asarray(image)
         # image_array = cv2.cvtColor(image, cv2.COLOR_RGB2HLS)
         # image_array = np.concatenate((image,image_array), axis = 2)
 #         image_array = np.reshape(image_array, newshape = (image_array.shape[0], image_array.shape[1], 1))
+        
         steering_angle = float(model.predict(image_array[None, :, :, :], batch_size=1))
 
         throttle = controller.update(float(speed))
